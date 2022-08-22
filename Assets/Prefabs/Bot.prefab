@@ -942,7 +942,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec684de9671f2243b251092be3a20b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
+  _healhBar: {fileID: 314000412278948772}
+  pointShoot: {fileID: 2965192812478574409}
 --- !u!1 &314000413837528202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,6 +1220,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f3affd548904cf449cadaf91b855419, type: 3}
+--- !u!114 &2965192812478574409 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5636267285556036014, guid: 5f3affd548904cf449cadaf91b855419, type: 3}
+  m_PrefabInstance: {fileID: 7430499704811204327}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b27ed6ba58d9fb4ba14b5713d043dad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7270542300515829515 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 286074987521518060, guid: 5f3affd548904cf449cadaf91b855419, type: 3}

@@ -17,6 +17,10 @@ namespace Assets.Scripts.Game
 
 		[SerializeField] private Animator _animatorBackgroundSpace;
 
+		[SerializeField] private EnemyManager _enemyManager;
+
+		private int _round = 1;
+
 		public override void Awake()
 		{
 			base.Awake();
@@ -36,6 +40,19 @@ namespace Assets.Scripts.Game
 			}
 
 			_animatorBackgroundSpace.speed = 10f;
+
+			_enemyManager.Subscribe(OnHandleEndRound);
+		}
+
+		private void OnHandleEndRound()
+		{
+			_round++;
+			StartRound();
+		}
+
+		private void StartRound()
+		{
+			_enemyManager.CreateEnemy(_round);
 		}
 
 		public void StartGame()
@@ -52,6 +69,8 @@ namespace Assets.Scripts.Game
 			};
 
 			AudioManager.Instance.PlayMusic(TypeAudio.MusicGame);
+
+			StartRound();
 		}
 	}
 }

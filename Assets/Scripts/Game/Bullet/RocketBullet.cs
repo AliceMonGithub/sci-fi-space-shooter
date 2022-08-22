@@ -16,11 +16,14 @@ public class RocketBullet : AbstractBullet
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		AudioManager.Instance.PlaySound(TypeAudio.KillEnemy);
-		Instantiate(Explosion, collision.transform);
-		gameObject.SetActive(false);
-		collision.GetComponent<Enemy>().AddDamage(CountDamage);
-		Debug.Log(collision.gameObject.name);
+		if (collision.GetComponent<Enemy>() != null)
+		{
+			AudioManager.Instance.PlaySound(TypeAudio.KillEnemy);
+			Instantiate(Explosion, collision.transform);
+			gameObject.SetActive(false);
+			collision.GetComponent<Enemy>().AddDamage(CountDamage);
+			Debug.Log(collision.gameObject.name);
+		}
 	}
 
 	private IEnumerator Delay()

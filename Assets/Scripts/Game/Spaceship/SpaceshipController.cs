@@ -1,4 +1,5 @@
 using Assets.Scripts.Audio;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class SpaceshipController : MonoBehaviour
 	[SerializeField] List<PointShoot> _pointShoot;
 
 	[SerializeField] private HealthBarHolder _stamynaBarHolder;
+	[SerializeField] private HealthBarHolder _healthBarHolder;
 
 	private void Start()
 	{
@@ -37,6 +39,11 @@ public class SpaceshipController : MonoBehaviour
 			_isRocketShhot = false;
 			StartCoroutine(Delay());
 		};
+	}
+
+	internal void AddDamage(float countDamage)
+	{
+		_healthBarHolder.AddDamage(Convert.ToInt32(countDamage));
 	}
 
 	private bool _isRocketShhot = true;

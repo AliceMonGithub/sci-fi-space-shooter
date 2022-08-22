@@ -1,7 +1,9 @@
 using Assets.Scripts.Game;
 using Assets.Scripts.Settings;
 using Assets.Scripts.UI;
+using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Assets.Scripts.Menu
 {
@@ -11,6 +13,8 @@ namespace Assets.Scripts.Menu
 
 		[SerializeField] private UIButton _playButton;
 		[SerializeField] private UIButton _settingsButton;
+
+		[SerializeField] private TMP_Text _nameGameText;
 
 		private void Start()
 		{
@@ -26,7 +30,8 @@ namespace Assets.Scripts.Menu
 
 		private void OnHandleSettingsButton()
 		{
-
+			_nameGameText.DOFade(0, 0.5f);
+			_settingsHandler.gameObject.SetActive(true);
 		}
 
 		private void OnHandlePlayButton()

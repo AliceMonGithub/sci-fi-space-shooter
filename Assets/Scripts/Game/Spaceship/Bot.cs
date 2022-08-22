@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public class Bot : MonoBehaviour
 {
+	[SerializeField] private List<Transform> targets = new List<Transform>();
 	private void Start()
 	{
 		GetComponentInChildren<HealthBarHolder>().ResetHealth();
@@ -14,6 +15,13 @@ public class Bot : MonoBehaviour
 			Destroy(gameObject);
 		};
 
+		List<Vector3> _paths = new List<Vector3>();
+
+		foreach (var item in targets)
+		{
+			_paths.Add(item.position);
+		}
+		transform.DOPath(_paths.ToArray(), 3f);
 		
 
 	}

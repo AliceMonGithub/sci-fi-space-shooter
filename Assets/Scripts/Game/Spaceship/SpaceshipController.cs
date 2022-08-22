@@ -1,3 +1,4 @@
+using Assets.Scripts.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class SpaceshipController : MonoBehaviour
 
 	[SerializeField] List<PointShoot> _pointShoot;
 
+	[SerializeField] private HealthBarHolder _stamynaBarHolder;
+
 	private void Start()
 	{
 		InputManager.Instance.OnHorizontal += OnHandleHorizontalMove;
@@ -27,6 +30,30 @@ public class SpaceshipController : MonoBehaviour
 			_pools.Add(pool);
 			_pools[i].IsAutoExpand = true;
 		}
+
+		_stamynaBarHolder.ResetHealth();
+		_stamynaBarHolder.OnDied += () =>
+		{
+			_isRocketShhot = false;
+			StartCoroutine(Delay());
+		};
+	}
+
+	private bool _isRocketShhot = true;
+
+	private IEnumerator Delay()
+	{
+		while (true)
+		{
+			yield return new WaitForSeconds(0.2f);
+			_stamynaBarHolder.AddDamage(-10);
+			if (_stamynaBarHolder.Health >= 100)
+			{
+				break;
+			}
+		}
+		_stamynaBarHolder.ResetHealth();
+		_isRocketShhot = true;
 	}
 
 	private void OnDestroy()
@@ -45,6 +72,7 @@ public class SpaceshipController : MonoBehaviour
 
 		if (Input.GetMouseButtonDown(0))
 		{
+			AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
 			var bullet = _pools[0].GetFreeElement();
 
 			bullet.transform.position = _pointShoot[_indexPointShooter].transform.position;
@@ -52,12 +80,15 @@ public class SpaceshipController : MonoBehaviour
 			_indexPointShooter = _indexPointShooter == 0 ? 1 : 0;
 		}
 
-		if (Input.GetMouseButtonDown(1))
+		if (Input.GetMouseButtonDown(1) && _isRocketShhot == true)
 		{
+			AudioManager.Instance.PlaySound(TypeAudio.RocketShoot);
 			var bullet = _pools[1].GetFreeElement();
 
 			bullet.transform.position = _pointShoot[2].transform.position;
 			bullet.gameObject.SetActive(true);
+
+			_stamynaBarHolder.AddDamage(35);
 		}
 
 	}

@@ -4,6 +4,10 @@ namespace Assets.Scripts.Audio
 	{
 		MusicMainMenu,
 		MusicGame,
-		ClickButton
+		ClickButton,
+		LineShoot,
+		RocketShoot,
+		GameOver,
+		KillEnemy
 	}
 }

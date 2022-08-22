@@ -33,7 +33,7 @@ public class HealthBarHolder : MonoBehaviour
 	{
 		Health -= count;
 
-		if(Health == 0) _isDied = true;
+		if(Health <= 0) _isDied = true;
 
 		var damage = 1f / 100f * count;
 

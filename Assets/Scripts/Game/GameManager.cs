@@ -12,6 +12,7 @@ namespace Assets.Scripts.Game
 	{
 		[SerializeField] private CanvasGroup _gameHud;
 		[SerializeField] private CanvasGroup _menuUI;
+		[SerializeField] private CanvasGroup _game;
 		[SerializeField] private HealthBarHolder _healthBarHolder;
 
 		[SerializeField] private Animator _animatorBackgroundSpace;
@@ -46,6 +47,8 @@ namespace Assets.Scripts.Game
 			_menuUI.DOFade(0f, 0.5f).onComplete += () =>
 			{
 				_menuUI.gameObject.SetActive(false);
+				_game.DOFade(1f, 0.3f);
+				_game.gameObject.SetActive(true);
 			};
 
 			AudioManager.Instance.PlayMusic(TypeAudio.MusicGame);

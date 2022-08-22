@@ -12,6 +12,8 @@ public class InputManager : SingletonMono<InputManager>
 	[SerializeField] private UIButton _leftArrowButton;
 	[SerializeField] private UIButton _rightArrowButton;
 
+	public bool IsActive = true;
+
 	private void Start()
 	{
 		_leftArrowButton.OnDownButton += () => HorizontalMove(-1);
@@ -22,20 +24,28 @@ public class InputManager : SingletonMono<InputManager>
 	}
 	private void Update()
 	{
-		//Move horizontal
-		if (Input.GetKey(KeyCode.A)) 
+		if (IsActive)
 		{
-			OnHorizontal?.Invoke(-1);
-		}
-		if (Input.GetKey(KeyCode.D))
-		{
-			OnHorizontal?.Invoke(1);
-		}
+			//Move horizontal
+			if (Input.GetKey(KeyCode.A))
+			{
+				OnHorizontal?.Invoke(-1);
+			}
+			if (Input.GetKey(KeyCode.D))
+			{
+				OnHorizontal?.Invoke(1);
+			}
 
-		if ((Input.GetKeyUp(KeyCode.D)) || Input.GetKeyUp(KeyCode.A))
+			if ((Input.GetKeyUp(KeyCode.D)) || Input.GetKeyUp(KeyCode.A))
+			{
+				OnHorizontal?.Invoke(0);
+			}
+		}
+		else
 		{
 			OnHorizontal?.Invoke(0);
 		}
+		
 		
 	}
 

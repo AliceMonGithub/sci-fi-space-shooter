@@ -58,7 +58,10 @@ public class SpaceshipController : MonoBehaviour
 
 	private void OnDestroy()
 	{
-		InputManager.Instance.OnHorizontal -= OnHandleHorizontalMove;
+		if(InputManager.Instance != null)
+		{
+			InputManager.Instance.OnHorizontal -= OnHandleHorizontalMove;
+		}
 	}
 
 	private void Update()

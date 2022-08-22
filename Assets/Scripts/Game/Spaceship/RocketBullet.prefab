@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 578913134691702315}
   - component: {fileID: 578913134691702314}
   - component: {fileID: 578913134691702318}
+  - component: {fileID: 4089855032339465175}
   m_Layer: 5
   m_Name: RocketBullet
   m_TagString: Untagged
@@ -90,5 +91,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _countDamage: 40
-  _explosion: {fileID: 0}
+  _explosion: {fileID: 4031232768669208629, guid: 69bc9de1566254e4db3ef4d734a7fbcd, type: 3}
   _speedMove: 3
+--- !u!61 &4089855032339465175
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578913134691702316}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -1.91}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 64, y: 64}
+  m_EdgeRadius: 0

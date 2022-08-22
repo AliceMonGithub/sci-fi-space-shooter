@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LineBullet : AbstractBullet
+public class RocketBullet : AbstractBullet
 {
 	private void OnEnable()
 	{
@@ -19,7 +19,7 @@ public class LineBullet : AbstractBullet
 		AudioManager.Instance.PlaySound(TypeAudio.KillEnemy);
 		Instantiate(Explosion, collision.transform);
 		gameObject.SetActive(false);
-		collision.GetComponent<Bot>().AddDamage(CountDamage);
+		collision.GetComponent<Enemy>().AddDamage(CountDamage);
 		Debug.Log(collision.gameObject.name);
 	}
 

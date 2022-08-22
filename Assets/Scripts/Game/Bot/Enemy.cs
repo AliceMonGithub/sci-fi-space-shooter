@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Bot : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
 	[SerializeField] private List<Transform> targets = new List<Transform>();
 	private void Start()

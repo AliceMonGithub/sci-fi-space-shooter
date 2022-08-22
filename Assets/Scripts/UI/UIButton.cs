@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Assets.Scripts.Audio;
 using UnityEngine.EventSystems;
+using System;
 
 namespace Assets.Scripts.UI
 {
@@ -11,12 +12,15 @@ namespace Assets.Scripts.UI
 	[RequireComponent(typeof(Button))]
 	public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	{
+		public Action OnDownButton;
+		public Action OnUpButton;
+
 		[SerializeField] private float _sizeClickButton = 0.9f;
 		[SerializeField] private float _timeAnimationScale = 0.2f;
 
 		private Button _button;
-
 		private event CallbackOnClickButton _onClickButton;
+
 		private Sequence _sequence;
 
 		private void Awake()
@@ -29,6 +33,8 @@ namespace Assets.Scripts.UI
 		private void OnDestroy()
 		{
 			_onClickButton = null;
+			OnDownButton = null;
+			OnUpButton = null;
 
 			if (_button != null) _button.onClick.RemoveAllListeners();
 		}
@@ -56,6 +62,8 @@ namespace Assets.Scripts.UI
 			if (_sequence != null) _sequence.Kill();
 
 			_sequence.Append(transform.DOScale(new Vector2(_sizeClickButton, _sizeClickButton), _timeAnimationScale));
+
+			OnDownButton?.Invoke();
 		}
 
 		public void OnPointerUp(PointerEventData eventData)
@@ -63,6 +71,8 @@ namespace Assets.Scripts.UI
 			if (_sequence != null) _sequence.Kill();
 
 			_sequence.Append(transform.DOScale(Vector2.one, _timeAnimationScale));
+
+			OnUpButton?.Invoke();
 		}
 	}
 }

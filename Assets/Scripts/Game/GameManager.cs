@@ -14,6 +14,8 @@ namespace Assets.Scripts.Game
 		[SerializeField] private CanvasGroup _menuUI;
 		[SerializeField] private HealthBarHolder _healthBarHolder;
 
+		[SerializeField] private Animator _animatorBackgroundSpace;
+
 		public override void Awake()
 		{
 			base.Awake();
@@ -31,6 +33,8 @@ namespace Assets.Scripts.Game
 			{
 				TutorialManager.Instance.CloseTutorial();
 			}
+
+			_animatorBackgroundSpace.speed = 10f;
 		}
 
 		public void StartGame()

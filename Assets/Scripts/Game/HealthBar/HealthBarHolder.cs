@@ -35,7 +35,6 @@ public class HealthBarHolder : MonoBehaviour
 
 		if(Health == 0) _isDied = true;
 
-
 		var damage = 1f / 100f * count;
 
 		if (_sequence != null)

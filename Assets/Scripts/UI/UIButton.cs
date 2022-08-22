@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Assets.Scripts.Audio;
 
 namespace Assets.Scripts.UI
 {
@@ -11,6 +10,9 @@ namespace Assets.Scripts.UI
 	[RequireComponent(typeof(Button))]
 	public class UIButton : MonoBehaviour
 	{
+		[SerializeField] private float _sizeClickButton = 0.9f;
+		[SerializeField] private float _timeAnimationScale = 0.2f;
+
 		private Button _button;
 		private event CallbackOnClickButton _onClickButton;
 
@@ -21,11 +23,20 @@ namespace Assets.Scripts.UI
 			_button.onClick.AddListener(OnHandleClickNutton);
 		}
 
+		private void OnDestroy()
+		{
+			_onClickButton = null;
+
+			if (_button != null) _button.onClick.RemoveAllListeners();
+		}
+
 		private void OnHandleClickNutton()
 		{
-			transform.DOScale(new Vector2(0.9f, 0.9f), 0.2f).onComplete += () =>
+			AudioManager.Instance.PlaySound(TypeAudio.ClickButton);
+
+			transform.DOScale(new Vector2(_sizeClickButton, _sizeClickButton), _timeAnimationScale).onComplete += () =>
 			{
-				transform.DOScale(Vector2.one, 0.2f).onComplete += () => _onClickButton?.Invoke();
+				transform.DOScale(Vector2.one, _timeAnimationScale).onComplete += () => _onClickButton?.Invoke();
 			};
 		}
 
@@ -34,11 +45,9 @@ namespace Assets.Scripts.UI
 			_onClickButton += callback;
 		}
 
-		private void OnDestroy()
+		public void UnSubscribe(CallbackOnClickButton callback)
 		{
-			_onClickButton = null;
-
-			if(_button != null) _button.onClick.RemoveAllListeners();
+			_onClickButton -= callback;
 		}
 	}
 }

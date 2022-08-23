@@ -39,6 +39,34 @@ public class SpaceshipController : MonoBehaviour
 			_isRocketShhot = false;
 			StartCoroutine(Delay());
 		};
+
+		InputManager.Instance.OnMouseDown += HandleMouseDown;
+	}
+
+	private void HandleMouseDown(int obj)
+	{
+		if (obj == 1)
+		{
+			
+
+			AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
+			var bullet = _pools[0].GetFreeElement();
+
+			bullet.transform.position = _pointShoot[_indexPointShooter].transform.position;
+			bullet.gameObject.SetActive(true);
+			_indexPointShooter = _indexPointShooter == 0 ? 1 : 0;
+		}
+		else
+		{
+			AudioManager.Instance.PlaySound(TypeAudio.RocketShoot);
+			var bullet = _pools[1].GetFreeElement();
+
+			bullet.transform.position = _pointShoot[2].transform.position;
+			bullet.gameObject.SetActive(true);
+
+			_stamynaBarHolder.AddDamage(35);
+
+		}
 	}
 
 	internal void AddDamage(float countDamage)

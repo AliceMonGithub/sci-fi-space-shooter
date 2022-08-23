@@ -10109,6 +10109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _leftArrowButton: {fileID: 258818337}
   _rightArrowButton: {fileID: 1795963332}
+  _ShootLineButton: {fileID: 1445245206}
+  _ShootRocketButton: {fileID: 358444662}
   IsActive: 1
 --- !u!4 &2035192815
 Transform:

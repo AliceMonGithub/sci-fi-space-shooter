@@ -8,9 +8,13 @@ using UnityEngine;
 public class InputManager : SingletonMono<InputManager>
 {
 	public Action<int> OnHorizontal;
+	public Action<int> OnMouseDown;
 
 	[SerializeField] private UIButton _leftArrowButton;
 	[SerializeField] private UIButton _rightArrowButton;
+
+	[SerializeField] private UIButton _ShootLineButton;
+	[SerializeField] private UIButton _ShootRocketButton;
 
 	public bool IsActive = true;
 
@@ -21,6 +25,9 @@ public class InputManager : SingletonMono<InputManager>
 
 		_rightArrowButton.OnDownButton += () => HorizontalMove(1);
 		_rightArrowButton.OnUpButton += () => HorizontalMove(0);
+
+		_ShootLineButton.OnDownButton += () => OnMouseDownHandler(1);
+		_ShootRocketButton.OnDownButton += ()=> OnMouseDownHandler(2);
 	}
 	private void Update()
 	{
@@ -52,6 +59,11 @@ public class InputManager : SingletonMono<InputManager>
 	private void HorizontalMove(int vectorIndex)
 	{
 		OnHorizontal?.Invoke(vectorIndex);
+	}
+
+	public void OnMouseDownHandler(int id)
+	{
+		OnMouseDown?.Invoke(id);
 	}
 
 

@@ -65,11 +65,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0426d2d0c0685cc4491f7406fb10c734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnEnemyList: []
+  _spawnPintList: []
   _pointPositionsLeft:
-  - {fileID: 8988110771502235494}
-  - {fileID: 6024388610211503643}
   - {fileID: 6024388610866716132}
+  - {fileID: 6024388610211503643}
+  - {fileID: 8988110771502235494}
   _pointPositionsRight:
   - {fileID: 6024388611146501619}
   - {fileID: 6024388611003337217}

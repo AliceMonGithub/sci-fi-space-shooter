@@ -22,26 +22,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
 	private Action _onCallbackEndRoundEnemys;
 
-	public void CreateEnemy(int round)
+	private void Start()
 	{
-		for (int i = 0; i < round; i++)
-		{
-			Enemy enemy = Instantiate(_enemyPrefab, _enemysContent);
-			_enemys.Add(enemy);
-
-
-			foreach (var container in _containers)
-			{
-				bool isAddEnemy = container.AddEnemy(enemy);
-
-				if (isAddEnemy == true) break;
-			}
-
-			enemy.Init();
-			enemy.SubscribeOnDied(OnHandleDiedBot);
-			enemy.MoveToPath();
-		}
-
 		_pools = new List<PoolControllerMono<AbstractBullet>>();
 
 		for (int i = 0; i < 1; i++)
@@ -50,7 +32,35 @@ public class EnemyManager : SingletonMono<EnemyManager>
 			_pools.Add(pool);
 			_pools[i].IsAutoExpand = true;
 		}
+	}
 
+	public void CreateEnemy(int countEnemy)
+	{
+		for (int i = 0; i < countEnemy; i++)
+		{
+			bool _isAddEnemyToContainer = false;
+
+			Enemy enemy = Instantiate(_enemyPrefab, _enemysContent);
+			
+			foreach (var container in _containers)
+			{
+				_isAddEnemyToContainer = container.AddEnemy(enemy);
+
+				if (_isAddEnemyToContainer == true) break;
+			}
+
+			if(_isAddEnemyToContainer == false)
+			{
+				Destroy(enemy);
+				return;
+			}
+
+			_enemys.Add(enemy);
+
+			enemy.Init();
+			enemy.SubscribeOnDied(OnHandleDiedBot);
+			enemy.MoveToPath();
+		}
 	}
 	private void OnHandleDiedBot(Enemy enemy)
 	{

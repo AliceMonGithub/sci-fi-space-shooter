@@ -67,12 +67,10 @@ public class Enemy : MonoBehaviour
 
 	public void MoveToPath()
 	{
-		transform.DOPath(_pathToStart.ToArray(), 3f);
-	}
-
-	public void OnEnable()
-	{
-		StartCoroutine(Delay());
+		transform.DOPath(_pathToStart.ToArray(), 3f).onComplete += () =>
+		{
+			StartCoroutine(Delay());
+		};
 	}
 
 	public void SubscribeOnDied(Action<Enemy> callback)

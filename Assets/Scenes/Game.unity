@@ -2371,9 +2371,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 215988765}
     m_Modifications:
     - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
       propertyPath: _spawnEnemyList.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4944271077519027704}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.data[1]
+      value: 
+      objectReference: {fileID: 133827274}
     - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
       propertyPath: _spawnEnemyList.Array.data[0]
       value: 
@@ -6805,9 +6817,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 215988765}
     m_Modifications:
     - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
       propertyPath: _spawnEnemyList.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4944271077519027704}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.data[1]
+      value: 
+      objectReference: {fileID: 133827274}
     - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
       propertyPath: _spawnEnemyList.Array.data[0]
       value: 
@@ -10452,9 +10476,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 215988765}
     m_Modifications:
     - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
       propertyPath: _spawnEnemyList.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.data[0]
+      value: 
+      objectReference: {fileID: 4944271077519027704}
+    - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
+      propertyPath: _spawnPintList.Array.data[1]
+      value: 
+      objectReference: {fileID: 133827274}
     - target: {fileID: 3775545116320817668, guid: 68e5feb274788234a824839f037e25a0, type: 3}
       propertyPath: _spawnEnemyList.Array.data[0]
       value: 
@@ -10707,6 +10743,10 @@ PrefabInstance:
     - target: {fileID: 3749604167071997997, guid: 314283883ecc8854a9d1b5b221a1499c, type: 3}
       propertyPath: m_Name
       value: SpawnPosition (Right)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4392755368192211709, guid: 314283883ecc8854a9d1b5b221a1499c, type: 3}
+      propertyPath: _typePosition
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8387989309586927439, guid: 314283883ecc8854a9d1b5b221a1499c, type: 3}
       propertyPath: m_Pivot.x

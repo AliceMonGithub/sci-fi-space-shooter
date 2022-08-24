@@ -5,7 +5,7 @@ using System.Linq;
 
 public class EnemyContainer : MonoBehaviour
 {
-	[SerializeField] private List<PointSpawnEnemy> _spawnEnemyList;
+	[SerializeField] private List<PointSpawnEnemy> _spawnPintList;
 	[SerializeField] private List<PointPositionEnemy> _pointPositionsLeft = new List<PointPositionEnemy>();
 	[SerializeField] private List<PointPositionEnemy> _pointPositionsRight = new List<PointPositionEnemy>();
 	private List<Enemy> _enemys = new List<Enemy>();
@@ -23,14 +23,14 @@ public class EnemyContainer : MonoBehaviour
 
 		if (pointPosition != null)
 		{
-			_spawnEnemyList.ForEach(pointSpawn =>
+			foreach (var spawnPoint in _spawnPintList)
 			{
-				if (pointSpawn.TypePosition == pointPosition.TypePosition)
+				if (spawnPoint.TypePosition == pointPosition.TypePosition)
 				{
-					enemy.transform.position = pointSpawn.transform.position;
-					return;
+					enemy.transform.localPosition = spawnPoint.transform.localPosition;
+					break;
 				}
-			});
+			}
 
 			pointPosition.SetEnemy(enemy);
 
@@ -82,8 +82,32 @@ public class EnemyContainer : MonoBehaviour
 
 		path.Add(pointPositionEnd);
 
+		BubbleSorting(ref path);
 
 		return path;
+
+
+		void BubbleSorting(ref List<PointPositionEnemy> positions)
+		{
+			int length = positions.Count;
+
+			PointPositionEnemy temp = positions[0];
+
+			for (int i = 0; i < length; i++)
+			{
+				for (int j = i + 1; j < length; j++)
+				{
+					if (positions[i].IndexPosition < positions[j].IndexPosition)
+					{
+						temp = positions[i];
+
+						positions[i] = positions[j];
+
+						positions[j] = temp;
+					}
+				}
+			}
+		}
 	}
 
 	private PointPositionEnemy GetPointPositionTarget(PointPositionEnemy pointPosition)

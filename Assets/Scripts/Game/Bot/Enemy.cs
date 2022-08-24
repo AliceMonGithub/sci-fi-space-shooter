@@ -7,15 +7,17 @@ using Assets.Scripts.Audio;
 
 public class Enemy : MonoBehaviour
 {
-	[SerializeField] private HealthBarHolder _healhBar; 
-
 	public HealthBarHolder HealthBar { get { return _healhBar; } }
+	public PointPositionEnemy PointPosition { get; internal set; }
+
+	[SerializeField] private HealthBarHolder _healhBar;
+	[SerializeField] private PointShoot _pointShoot;
 
 	private Action<Enemy> _callbackDiedEnemy;
+	[SerializeField] private List<PointPositionEnemy> _enemyList;
+	private List<Vector3> _pathToStart = new List<Vector3>();
 
-	private Vector3[] _path;
-
-	[SerializeField] private PointShoot pointShoot;
+	
 
 
 	public void AddDamage(float count)
@@ -31,7 +33,7 @@ public class Enemy : MonoBehaviour
 			AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
 			var bullet = EnemyManager.Instance._pools[0].GetFreeElement();
 
-			bullet.transform.position = pointShoot.transform.position;
+			bullet.transform.position = _pointShoot.transform.position;
 			bullet.gameObject.SetActive(true);
 		}
 		
@@ -50,15 +52,22 @@ public class Enemy : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	public void SetPath(Vector3[] path)
+	public void SetPathToStartEnemy(List<PointPositionEnemy> pointPositions)
 	{
-		_path = path;
+		_enemyList = pointPositions;
+		Debug.Log(pointPositions.Count);
+
+		pointPositions.ForEach(point =>
+		{
+			_pathToStart.Add(point.transform.position);
+		});
+
+		PointPosition = pointPositions[pointPositions.Count - 1];
 	}
 
 	public void MoveToPath()
 	{
-		transform.DOPath(_path, 3f);
-		
+		transform.DOPath(_pathToStart.ToArray(), 3f);
 	}
 
 	public void OnEnable()
@@ -66,7 +75,7 @@ public class Enemy : MonoBehaviour
 		StartCoroutine(Delay());
 	}
 
-	public void Subscribe(Action<Enemy> callback)
+	public void SubscribeOnDied(Action<Enemy> callback)
 	{
 		_callbackDiedEnemy += callback;
 	}

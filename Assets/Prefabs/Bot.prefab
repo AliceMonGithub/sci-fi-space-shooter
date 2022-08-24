@@ -943,7 +943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healhBar: {fileID: 314000412278948772}
-  pointShoot: {fileID: 2965192812478574409}
+  _pointShoot: {fileID: 2965192812478574409}
 --- !u!1 &314000413837528202
 GameObject:
   m_ObjectHideFlags: 0

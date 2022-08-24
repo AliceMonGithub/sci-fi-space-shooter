@@ -55,6 +55,7 @@ namespace Assets.Scripts.Game
 			_enemyManager.CreateEnemy(_round);
 		}
 
+		[ContextMenu("Start Game")]
 		public void StartGame()
 		{
 			_gameHud.alpha = 0f;

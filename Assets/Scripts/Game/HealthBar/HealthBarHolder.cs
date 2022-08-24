@@ -33,7 +33,15 @@ public class HealthBarHolder : MonoBehaviour
 	{
 		Health -= count;
 
-		if(Health <= 0) _isDied = true;
+		if(Health <= 0)
+		{
+			_healthBarSlider.value = 0f;
+			_hitBarSlider.value = 1f;
+			_faderSlider.value = 1f;
+			_isDied = true;
+			OnDied?.Invoke();
+			return;
+		}
 
 		var damage = 1f / 100f * count;
 
@@ -70,8 +78,6 @@ public class HealthBarHolder : MonoBehaviour
 		{
 			_healthBarSlider.value -= damage;
 			_isHealthDamage = true;
-
-			if (_isDied) OnDied?.Invoke();
 		};
 
 		_sequence.Append(hitBarSliderValue);

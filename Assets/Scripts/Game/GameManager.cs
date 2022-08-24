@@ -72,6 +72,16 @@ namespace Assets.Scripts.Game
 			AudioManager.Instance.PlayMusic(TypeAudio.MusicGame);
 
 			StartRound();
+			StartCoroutine(NextMusicToGameFromDelay());
+		}
+
+		private IEnumerator NextMusicToGameFromDelay()
+		{
+			while (true)
+			{
+				yield return new WaitForSeconds(30f);
+				AudioManager.Instance.NextMusic();
+			}
 		}
 	}
 }

@@ -944,6 +944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healhBar: {fileID: 314000412278948772}
   _pointShoot: {fileID: 2965192812478574409}
+  _explosionDead: {fileID: 3071226277207400341, guid: 600ec83cba1cec448bf41a6607229741, type: 3}
 --- !u!1 &314000413837528202
 GameObject:
   m_ObjectHideFlags: 0

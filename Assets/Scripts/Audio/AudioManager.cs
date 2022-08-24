@@ -27,6 +27,9 @@ namespace Assets.Scripts.Audio
 
 		private Dictionary<TypeAudio, Audio> _audios = new Dictionary<TypeAudio, Audio>();
 
+		private Audio _currentTypeMusic = null;
+		private List<Audio> _playlistOldMusic = new List<Audio>();
+
 
 		public override void Awake()
 		{
@@ -52,8 +55,47 @@ namespace Assets.Scripts.Audio
 
 			var audio = GetAudioFromTargetType(typeAudio);
 
+			HandlePlaylistMusics(audio);
+
+			if(_currentTypeMusic != null && _musicSource.isPlaying == true)
+			{
+				_musicSource.DOFade(0, 0.5f).onComplete += () =>
+				{
+					_musicSource.clip = audio.Clip;
+					_musicSource.Play();
+
+					_musicSource.DOFade(1, 0.3f);
+				};
+				return;
+			}
+
 			_musicSource.clip = audio.Clip;
 			_musicSource.Play();
+
+			_musicSource.DOFade(1, 0.3f);
+		}
+
+		private void HandlePlaylistMusics(Audio music)
+		{
+			if(_playlistOldMusic.Count == _musics.Count)
+			{
+				_playlistOldMusic = new List<Audio>();
+			}
+
+			_currentTypeMusic = music;
+			_playlistOldMusic.Add(music);
+		}
+
+		public void NextMusic()
+		{
+			foreach (var music in _musics)
+			{
+				if(_playlistOldMusic.Contains(music) == false)
+				{
+					PlayMusic(music.Type);
+					return;
+				}
+			}
 		}
 
 		public void SetPitchToCurrentMusic(TypePitch typePitch)

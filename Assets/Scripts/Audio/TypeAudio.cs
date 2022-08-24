@@ -8,6 +8,13 @@ namespace Assets.Scripts.Audio
 		LineShoot,
 		RocketShoot,
 		GameOver,
-		KillEnemy
+		KillEnemy,
+		ExplosionDead,
+		MusicGame2,
+		MusicGame3,
+		MusicGame4,
+		MusicGame5,
+		MusicGame6,
+		MusicGame7,
 	}
 }

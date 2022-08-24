@@ -8,17 +8,19 @@ public class SpaceshipController : MonoBehaviour
 {
 	[SerializeField] private RectTransform _rectTransform;
 	[SerializeField] private float _speedMove;
-
-	private List<PoolControllerMono<AbstractBullet>> _pools;
+	
 	[SerializeField] private List<AbstractBullet> _lineBulletPrefabs;
 	[SerializeField] private Transform _bulletContent;
-	private int _vectorIndex = 0;
-	[SerializeField] private int _poolCount;
-
-	[SerializeField] List<PointShoot> _pointShoot;
 
 	[SerializeField] private HealthBarHolder _stamynaBarHolder;
 	[SerializeField] private HealthBarHolder _healthBarHolder;
+
+	[SerializeField] List<PointShoot> _pointShoot;
+	[SerializeField] private int _poolCount;
+
+	private List<PoolControllerMono<AbstractBullet>> _pools;
+	private int _vectorIndex = 0;
+	private bool _isRocketShhot = true;
 
 	private void Start()
 	{
@@ -37,36 +39,8 @@ public class SpaceshipController : MonoBehaviour
 		_stamynaBarHolder.OnDied += () =>
 		{
 			_isRocketShhot = false;
-			StartCoroutine(Delay());
+			StartCoroutine(StamynaResetDelay());
 		};
-
-		InputManager.Instance.OnMouseDown += HandleMouseDown;
-	}
-
-	private void HandleMouseDown(int obj)
-	{
-		if (obj == 1)
-		{
-			
-
-			AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
-			var bullet = _pools[0].GetFreeElement();
-
-			bullet.transform.position = _pointShoot[_indexPointShooter].transform.position;
-			bullet.gameObject.SetActive(true);
-			_indexPointShooter = _indexPointShooter == 0 ? 1 : 0;
-		}
-		else
-		{
-			AudioManager.Instance.PlaySound(TypeAudio.RocketShoot);
-			var bullet = _pools[1].GetFreeElement();
-
-			bullet.transform.position = _pointShoot[2].transform.position;
-			bullet.gameObject.SetActive(true);
-
-			_stamynaBarHolder.AddDamage(35);
-
-		}
 	}
 
 	internal void AddDamage(float countDamage)
@@ -74,19 +48,16 @@ public class SpaceshipController : MonoBehaviour
 		_healthBarHolder.AddDamage(Convert.ToInt32(countDamage));
 	}
 
-	private bool _isRocketShhot = true;
-
-	private IEnumerator Delay()
+	private IEnumerator StamynaResetDelay()
 	{
 		while (true)
 		{
 			yield return new WaitForSeconds(0.2f);
-			_stamynaBarHolder.AddDamage(-10);
-			if (_stamynaBarHolder.Health >= 100)
-			{
-				break;
-			}
+			_stamynaBarHolder.AddDamage(-5);
+
+			if (_stamynaBarHolder.Health >= 100) break;
 		}
+
 		_stamynaBarHolder.ResetHealth();
 		_isRocketShhot = true;
 	}
@@ -111,11 +82,18 @@ public class SpaceshipController : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
-			var bullet = _pools[0].GetFreeElement();
 
-			bullet.transform.position = _pointShoot[_indexPointShooter].transform.position;
-			bullet.gameObject.SetActive(true);
-			_indexPointShooter = _indexPointShooter == 0 ? 1 : 0;
+			var bullets = new List<AbstractBullet>
+			{
+				_pools[0].GetFreeElement(),
+				_pools[0].GetFreeElement()
+			};
+
+			for (int i = 0; i < bullets.Count; i++)
+			{
+				bullets[i].transform.position = _pointShoot[i].transform.position;
+				bullets[i].gameObject.SetActive(true);
+			}
 		}
 
 		if (Input.GetMouseButtonDown(1) && _isRocketShhot == true)
@@ -130,8 +108,6 @@ public class SpaceshipController : MonoBehaviour
 		}
 
 	}
-
-	private int _indexPointShooter = 0;
 
 	private void OnHandleHorizontalMove(int vector)
 	{

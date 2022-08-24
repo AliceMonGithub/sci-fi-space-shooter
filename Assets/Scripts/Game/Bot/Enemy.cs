@@ -12,13 +12,10 @@ public class Enemy : MonoBehaviour
 
 	[SerializeField] private HealthBarHolder _healhBar;
 	[SerializeField] private PointShoot _pointShoot;
+	[SerializeField] private Explosion _explosionDead;
 
 	private Action<Enemy> _callbackDiedEnemy;
-	[SerializeField] private List<PointPositionEnemy> _enemyList;
 	private List<Vector3> _pathToStart = new List<Vector3>();
-
-	
-
 
 	public void AddDamage(float count)
 	{
@@ -43,20 +40,20 @@ public class Enemy : MonoBehaviour
 	{
 		_healhBar.ResetHealth();
 		_healhBar.OnDied += OnHandleDiedEnemy;
-		
 	}
 
 	private void OnHandleDiedEnemy()
 	{
+		AudioManager.Instance.PlaySound(TypeAudio.ExplosionDead);
+		var explosion = Instantiate(_explosionDead);
+		explosion.transform.position = transform.position;
+
 		_callbackDiedEnemy?.Invoke(this);
 		Destroy(gameObject);
 	}
 
 	public void SetPathToStartEnemy(List<PointPositionEnemy> pointPositions)
 	{
-		_enemyList = pointPositions;
-		Debug.Log(pointPositions.Count);
-
 		pointPositions.ForEach(point =>
 		{
 			_pathToStart.Add(point.transform.position);

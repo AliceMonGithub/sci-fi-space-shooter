@@ -1,5 +1,8 @@
-﻿public enum TypePosition
+﻿namespace Assets.Scripts.Game.Enemy
 {
-	Left,
-	Right
+	public enum TypePosition
+	{
+		Left,
+		Right
+	}
 }

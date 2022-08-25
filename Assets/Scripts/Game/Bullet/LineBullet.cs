@@ -1,34 +1,10 @@
-using Assets.Scripts.Audio;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class LineBullet : AbstractBullet
+namespace Assets.Scripts.Game.Bullet
 {
-	private void OnEnable()
+	public class LineBullet : AbstractBullet
 	{
-		StartCoroutine(Delay());
-	}
-	private void Update()
-	{
-		GetComponent<RectTransform>().anchoredPosition = new Vector2(GetComponent<RectTransform>().anchoredPosition.x, GetComponent<RectTransform>().anchoredPosition.y + 1f * SpeedMove);
-	}
-
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if(collision.GetComponent<Enemy>() != null)
+		private void Update()
 		{
-			AudioManager.Instance.PlaySound(TypeAudio.KillEnemy);
-			Instantiate(Explosion, collision.transform);
-			gameObject.SetActive(false);
-			collision.GetComponent<Enemy>().AddDamage(CountDamage);
-			Debug.Log(collision.gameObject.name);
+			MoveBulletUp();
 		}
-	}
-
-	private IEnumerator Delay()
-	{
-		yield return new WaitForSecondsRealtime(2f);
-		gameObject.SetActive(false);
 	}
 }

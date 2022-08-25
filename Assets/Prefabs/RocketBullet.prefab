@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a0333b9d45a1f4498f2d98055d484f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rectTransform: {fileID: 578913134691702317}
   _countDamage: 40
   _explosion: {fileID: 4031232768669208629, guid: 69bc9de1566254e4db3ef4d734a7fbcd, type: 3}
   _speedMove: 3

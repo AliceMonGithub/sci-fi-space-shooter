@@ -3,84 +3,87 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
-public class HealthBarHolder : MonoBehaviour
+namespace Assets.Scripts.Game.HealthBar
 {
-	public int Health { get; private set; } = 100;
-	public Action OnDied;
-
-	[SerializeField] private Slider _healthBarSlider;
-	[SerializeField] private Slider _hitBarSlider;
-	[SerializeField] private Slider _faderSlider;
-
-	private Sequence _sequence;
-	private bool _isHealthDamage = false;
-	private float _valueHitSlider = 0f;
-
-	private bool _isDied = false;
-
-	public void ResetHealth()
+	public class HealthBarHolder : MonoBehaviour
 	{
-		Health = 100;
+		public int Health { get; private set; } = 100;
+		public Action OnDied;
 
-		_isDied = false;
+		[SerializeField] private Slider _healthBarSlider;
+		[SerializeField] private Slider _hitBarSlider;
+		[SerializeField] private Slider _faderSlider;
 
-		_healthBarSlider.value = 1f;
-		_hitBarSlider.value = 0f;
-		_faderSlider.value = 0f;
-	}
+		private Sequence _sequence;
+		private bool _isHealthDamage = false;
+		private float _valueHitSlider = 0f;
 
-	public void AddDamage(int count)
-	{
-		Health -= count;
+		private bool _isDied = false;
 
-		if(Health <= 0)
+		public void ResetHealth()
 		{
-			_healthBarSlider.value = 0f;
-			_hitBarSlider.value = 1f;
-			_faderSlider.value = 1f;
-			_isDied = true;
-			OnDied?.Invoke();
-			return;
+			Health = 100;
+
+			_isDied = false;
+
+			_healthBarSlider.value = 1f;
+			_hitBarSlider.value = 0f;
+			_faderSlider.value = 0f;
 		}
 
-		var damage = 1f / 100f * count;
-
-		if (_sequence != null)
+		public void AddDamage(int count)
 		{
-			_sequence.Kill();
+			Health -= count;
 
-			if(_isHealthDamage == false)
+			if (Health <= 0)
+			{
+				_healthBarSlider.value = 0f;
+				_hitBarSlider.value = 1f;
+				_faderSlider.value = 1f;
+				_isDied = true;
+				OnDied?.Invoke();
+				return;
+			}
+
+			var damage = 1f / 100f * count;
+
+			if (_sequence != null)
+			{
+				_sequence.Kill();
+
+				if (_isHealthDamage == false)
+				{
+					_healthBarSlider.value -= damage;
+					_hitBarSlider.value = _valueHitSlider;
+					_faderSlider.value = _valueHitSlider;
+					_hitBarSlider.GetComponent<CanvasGroup>().alpha = 0f;
+				}
+			}
+
+			_isHealthDamage = false;
+
+			_sequence = DOTween.Sequence();
+
+			_hitBarSlider.GetComponent<CanvasGroup>().alpha = 1f;
+			_valueHitSlider = _hitBarSlider.value + damage;
+
+			var hitBarSliderValue = _hitBarSlider.DOValue(_hitBarSlider.value + damage, 0.3f);
+
+			hitBarSliderValue.onComplete += () =>
+			{
+				_faderSlider.value = _hitBarSlider.value;
+			};
+
+			var hitBarSliderFader = _hitBarSlider.GetComponent<CanvasGroup>().DOFade(0f, 0.2f);
+
+			hitBarSliderFader.onComplete += () =>
 			{
 				_healthBarSlider.value -= damage;
-				_hitBarSlider.value = _valueHitSlider;
-				_faderSlider.value = _valueHitSlider;
-				_hitBarSlider.GetComponent<CanvasGroup>().alpha = 0f;
-			}
+				_isHealthDamage = true;
+			};
+
+			_sequence.Append(hitBarSliderValue);
+			_sequence.Append(hitBarSliderFader);
 		}
-
-		_isHealthDamage = false;
-
-		_sequence = DOTween.Sequence();
-
-		_hitBarSlider.GetComponent<CanvasGroup>().alpha = 1f;
-		_valueHitSlider = _hitBarSlider.value + damage;
-
-		var hitBarSliderValue = _hitBarSlider.DOValue(_hitBarSlider.value + damage, 0.3f);
-
-		hitBarSliderValue.onComplete += () =>
-		{
-			_faderSlider.value = _hitBarSlider.value;
-		};
-
-		var hitBarSliderFader = _hitBarSlider.GetComponent<CanvasGroup>().DOFade(0f, 0.2f);
-
-		hitBarSliderFader.onComplete += () =>
-		{
-			_healthBarSlider.value -= damage;
-			_isHealthDamage = true;
-		};
-
-		_sequence.Append(hitBarSliderValue);
-		_sequence.Append(hitBarSliderFader);
 	}
 }

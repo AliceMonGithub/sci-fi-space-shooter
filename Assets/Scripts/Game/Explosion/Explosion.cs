@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+namespace Assets.Scripts.Game.Explosion
 {
-	private void OnEnable()
+	public class Explosion : MonoBehaviour
 	{
-		StartCoroutine(Delay());
-	}
+		private void OnEnable()
+		{
+			StartCoroutine(Delay());
+		}
 
-	IEnumerator Delay()
-	{
-		yield return new WaitForSeconds(0.5f);
-		Destroy(gameObject);
+		IEnumerator Delay()
+		{
+			yield return new WaitForSeconds(0.5f);
+			Destroy(gameObject);
+		}
 	}
 }

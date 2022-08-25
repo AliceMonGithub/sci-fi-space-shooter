@@ -1,117 +1,143 @@
-using Assets.Scripts.Audio;
 using System;
+using Assets.Scripts.Audio;
+using Assets.Scripts.Game.Bullet;
+using Assets.Scripts.Game.HealthBar;
+using Assets.Scripts.Utils;
+using Effects = Assets.Scripts.Game.Explosion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpaceshipController : MonoBehaviour
+namespace Assets.Scripts.Game.Spaceship
 {
-	[SerializeField] private RectTransform _rectTransform;
-	[SerializeField] private float _speedMove;
-	
-	[SerializeField] private List<AbstractBullet> _lineBulletPrefabs;
-	[SerializeField] private Transform _bulletContent;
-
-	[SerializeField] private HealthBarHolder _stamynaBarHolder;
-	[SerializeField] private HealthBarHolder _healthBarHolder;
-
-	[SerializeField] List<PointShoot> _pointShoot;
-	[SerializeField] private int _poolCount;
-
-	private List<PoolControllerMono<AbstractBullet>> _pools;
-	private int _vectorIndex = 0;
-	private bool _isRocketShhot = true;
-
-	private void Start()
+	public class SpaceshipController : MonoBehaviour
 	{
-		InputManager.Instance.OnHorizontal += OnHandleHorizontalMove;
+		[SerializeField] private RectTransform _rectTransform;
+		[SerializeField] private float _speedMove;
 
-		_pools = new List<PoolControllerMono<AbstractBullet>>();
+		[SerializeField] private List<AbstractBullet> _lineBulletPrefabs;
+		[SerializeField] private Transform _bulletContent;
 
-		for (int i = 0; i < _poolCount; i++)
+		[SerializeField] private HealthBarHolder _stamynaBarHolder;
+		[SerializeField] private HealthBarHolder _healthBarHolder;
+
+		[SerializeField] List<PointShoot> _pointShoot;
+		[SerializeField] private int _poolCount;
+
+		[SerializeField] private Effects.Explosion _explosionDead;
+
+		private List<PoolControllerMono<AbstractBullet>> _pools;
+		private int _vectorIndex = 0;
+		private bool _isRocketShhot = true;
+
+		private void Start()
 		{
-			var pool = new PoolControllerMono<AbstractBullet>(_lineBulletPrefabs[i], _poolCount, _bulletContent);
-			_pools.Add(pool);
-			_pools[i].IsAutoExpand = true;
+			InputManager.Instance.OnHorizontal += OnHandleHorizontalMove;
+
+			_pools = new List<PoolControllerMono<AbstractBullet>>();
+
+			for (int i = 0; i < _poolCount; i++)
+			{
+				var pool = new PoolControllerMono<AbstractBullet>(_lineBulletPrefabs[i], _poolCount, _bulletContent);
+				_pools.Add(pool);
+				_pools[i].IsAutoExpand = true;
+			}
+
+			_stamynaBarHolder.ResetHealth();
+
+			_stamynaBarHolder.OnDied += () =>
+			{
+				_isRocketShhot = false;
+				StartCoroutine(StamynaResetDelay());
+			};
+
+			_healthBarHolder.OnDied += () =>
+			{
+				GameManager.Instance.RestartGame(2f);
+				OnHandleDiedEnemy();
+			};
 		}
 
-		_stamynaBarHolder.ResetHealth();
-		_stamynaBarHolder.OnDied += () =>
+
+		private void OnHandleDiedEnemy()
 		{
-			_isRocketShhot = false;
-			StartCoroutine(StamynaResetDelay());
-		};
-	}
+			AudioManager.Instance.PlaySound(TypeAudio.ExplosionDead);
+			var explosion = Instantiate(_explosionDead);
+			explosion.transform.position = transform.position;
 
-	internal void AddDamage(float countDamage)
-	{
-		_healthBarHolder.AddDamage(Convert.ToInt32(countDamage));
-	}
-
-	private IEnumerator StamynaResetDelay()
-	{
-		while (true)
-		{
-			yield return new WaitForSeconds(0.2f);
-			_stamynaBarHolder.AddDamage(-5);
-
-			if (_stamynaBarHolder.Health >= 100) break;
+			Destroy(gameObject);
 		}
 
-		_stamynaBarHolder.ResetHealth();
-		_isRocketShhot = true;
-	}
-
-	private void OnDestroy()
-	{
-		if(InputManager.Instance != null)
+		public void AddDamage(float countDamage)
 		{
-			InputManager.Instance.OnHorizontal -= OnHandleHorizontalMove;
-		}
-	}
-
-	private void Update()
-	{
-		if(_vectorIndex != 0)
-		{
-			var translateVector = _rectTransform.anchoredPosition;
-			translateVector.x += _vectorIndex * Time.deltaTime * _speedMove;
-			_rectTransform.anchoredPosition = translateVector;
+			_healthBarHolder.AddDamage(Convert.ToInt32(countDamage));
 		}
 
-		if (Input.GetMouseButtonDown(0))
+		private IEnumerator StamynaResetDelay()
 		{
-			AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
+			while (true)
+			{
+				yield return new WaitForSeconds(0.2f);
+				_stamynaBarHolder.AddDamage(-5);
 
-			var bullets = new List<AbstractBullet>
+				if (_stamynaBarHolder.Health >= 100) break;
+			}
+
+			_stamynaBarHolder.ResetHealth();
+			_isRocketShhot = true;
+		}
+
+		private void OnDestroy()
+		{
+			if (InputManager.Instance != null)
+			{
+				InputManager.Instance.OnHorizontal -= OnHandleHorizontalMove;
+			}
+		}
+
+		private void Update()
+		{
+			if (_vectorIndex != 0)
+			{
+				var translateVector = _rectTransform.anchoredPosition;
+				translateVector.x += _vectorIndex * Time.deltaTime * _speedMove;
+				_rectTransform.anchoredPosition = translateVector;
+			}
+
+			if (Input.GetMouseButtonDown(0))
+			{
+				AudioManager.Instance.PlaySound(TypeAudio.LineShoot);
+
+				var bullets = new List<AbstractBullet>
 			{
 				_pools[0].GetFreeElement(),
 				_pools[0].GetFreeElement()
 			};
 
-			for (int i = 0; i < bullets.Count; i++)
-			{
-				bullets[i].transform.position = _pointShoot[i].transform.position;
-				bullets[i].gameObject.SetActive(true);
+				for (int i = 0; i < bullets.Count; i++)
+				{
+					bullets[i].transform.position = _pointShoot[i].transform.position;
+					bullets[i].gameObject.SetActive(true);
+				}
 			}
+
+			if (Input.GetMouseButtonDown(1) && _isRocketShhot == true)
+			{
+				AudioManager.Instance.PlaySound(TypeAudio.RocketShoot);
+				var bullet = _pools[1].GetFreeElement();
+
+				bullet.transform.position = _pointShoot[2].transform.position;
+				bullet.gameObject.SetActive(true);
+
+				_stamynaBarHolder.AddDamage(35);
+			}
+
 		}
 
-		if (Input.GetMouseButtonDown(1) && _isRocketShhot == true)
+		private void OnHandleHorizontalMove(int vector)
 		{
-			AudioManager.Instance.PlaySound(TypeAudio.RocketShoot);
-			var bullet = _pools[1].GetFreeElement();
-
-			bullet.transform.position = _pointShoot[2].transform.position;
-			bullet.gameObject.SetActive(true);
-
-			_stamynaBarHolder.AddDamage(35);
+			_vectorIndex = vector;
+			_rectTransform.localRotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 6 * -vector);
 		}
-
-	}
-
-	private void OnHandleHorizontalMove(int vector)
-	{
-		_vectorIndex = vector;
-		_rectTransform.localRotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 6 * -vector);
 	}
 }

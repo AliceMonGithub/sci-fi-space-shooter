@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PointShoot : MonoBehaviour
+namespace Assets.Scripts.Game.Spaceship
 {
+	public class PointShoot : MonoBehaviour { }
 }

@@ -1,35 +1,28 @@
+using Assets.Scripts.Game.Spaceship;
 using Assets.Scripts.Audio;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DarkBullet : AbstractBullet
+namespace Assets.Scripts.Game.Bullet
 {
-	private void OnEnable()
+	public class DarkBullet : AbstractBullet
 	{
-		StartCoroutine(Delay());
-	}
-	private void Update()
-	{
-		GetComponent<RectTransform>().anchoredPosition = new Vector2(GetComponent<RectTransform>().anchoredPosition.x, GetComponent<RectTransform>().anchoredPosition.y - 1f * SpeedMove);
-	}
-
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if(collision.GetComponent<SpaceshipController>() != null)
+		private void Update()
 		{
-			AudioManager.Instance.PlaySound(TypeAudio.KillEnemy);
-			Instantiate(Explosion, collision.transform);
-			gameObject.SetActive(false);
-			collision.GetComponent<SpaceshipController>().AddDamage(CountDamage);
-			Debug.Log(collision.gameObject.name);
+			MoveBulletDown();
 		}
-		
-	}
 
-	private IEnumerator Delay()
-	{
-		yield return new WaitForSecondsRealtime(2f);
-		gameObject.SetActive(false);
+		public override void OnTriggerEnter2D(Collider2D collision)
+		{
+			if (collision.GetComponent<SpaceshipController>() != null)
+			{
+				AudioManager.Instance.PlaySound(TypeAudio.KillEnemy);
+
+				Instantiate(Explosion, collision.transform);
+				gameObject.SetActive(false);
+
+				collision.GetComponent<SpaceshipController>().AddDamage(CountDamage);
+			}
+
+		}
 	}
 }

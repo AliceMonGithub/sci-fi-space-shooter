@@ -1,10 +1,13 @@
 using Assets.Scripts.Audio;
+using Assets.Scripts.Game.Enemy;
+using Assets.Scripts.Game.HealthBar;
+using Assets.Scripts.Tutorial;
 using Assets.Scripts.Utils;
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Game
 {
@@ -73,6 +76,17 @@ namespace Assets.Scripts.Game
 
 			StartRound();
 			StartCoroutine(NextMusicToGameFromDelay());
+		}
+
+		public void RestartGame(float timeDealy)
+		{
+			StartCoroutine(DealyRestartGame(timeDealy));
+		}
+
+		private IEnumerator DealyRestartGame(float time)
+		{
+			yield return new WaitForSeconds(time);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
 
 		private IEnumerator NextMusicToGameFromDelay()

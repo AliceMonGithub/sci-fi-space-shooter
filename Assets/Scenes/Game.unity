@@ -887,6 +887,7 @@ MonoBehaviour:
   - {fileID: 1096938489}
   - {fileID: 2060482464}
   _poolCount: 2
+  _explosionDead: {fileID: 3071226277207400341, guid: 600ec83cba1cec448bf41a6607229741, type: 3}
 --- !u!50 &276649331
 Rigidbody2D:
   serializedVersion: 4

@@ -1,93 +1,95 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolControllerMono<T> where T : MonoBehaviour
+namespace Assets.Scripts.Utils
 {
-	public T Prefab { get; }
-	public bool IsAutoExpand { get; set; }
-	public Transform Container { get; }
-	private List<T> _pool;
-
-	public PoolControllerMono(T prefab, int count)
+	public class PoolControllerMono<T> where T : MonoBehaviour
 	{
-		Prefab = prefab;
-		Container = null;
+		public T Prefab { get; }
+		public bool IsAutoExpand { get; set; }
+		public Transform Container { get; }
+		private List<T> _pool;
 
-		CreatePool(count: count);
-	}
-
-	public PoolControllerMono(T prefab, int count, Transform container)
-	{
-		Prefab = prefab;
-		Container = container;
-
-		CreatePool(count: count);
-	}
-
-	private void CreatePool(int count)
-	{
-		_pool = new List<T>();
-
-		for (int i = 0; i < count; i++)
+		public PoolControllerMono(T prefab, int count)
 		{
-			CreateObject(isActiveByDefault: false);
+			Prefab = prefab;
+			Container = null;
+
+			CreatePool(count: count);
 		}
-	}
 
-	private T CreateObject(bool isActiveByDefault = false)
-	{
-		var createdObject = Object.Instantiate(Prefab, Container);
-		createdObject.gameObject.SetActive(isActiveByDefault);
-		_pool.Add(createdObject);
-		return createdObject;
-
-	}
-
-	public bool HasFreeElement(out T element)
-	{
-
-		foreach (var mono in _pool)
+		public PoolControllerMono(T prefab, int count, Transform container)
 		{
-			if (!mono.gameObject.activeInHierarchy)
-			{
-				element = mono;
-				mono.gameObject.SetActive(true);
-				return true;
-			}
+			Prefab = prefab;
+			Container = container;
+
+			CreatePool(count: count);
 		}
-		element = null;
-		return false;
-	}
 
-	public bool HasBusyElement(out T element)
-	{
-		foreach (var mono in _pool)
+		private void CreatePool(int count)
 		{
-			if (mono.gameObject.activeInHierarchy)
+			_pool = new List<T>();
+
+			for (int i = 0; i < count; i++)
 			{
-				element = mono;
-				mono.gameObject.SetActive(false);
-				return true;
+				CreateObject(isActiveByDefault: false);
 			}
 		}
 
-		element = null;
-		return false;
-	}
-
-	public T GetFreeElement()
-	{
-		if (HasFreeElement(element: out var element))
+		private T CreateObject(bool isActiveByDefault = false)
 		{
-			return element;
+			var createdObject = Object.Instantiate(Prefab, Container);
+			createdObject.gameObject.SetActive(isActiveByDefault);
+			_pool.Add(createdObject);
+			return createdObject;
+
 		}
 
-		if (IsAutoExpand)
+		public bool HasFreeElement(out T element)
 		{
-			return CreateObject(true);
+
+			foreach (var mono in _pool)
+			{
+				if (!mono.gameObject.activeInHierarchy)
+				{
+					element = mono;
+					mono.gameObject.SetActive(true);
+					return true;
+				}
+			}
+			element = null;
+			return false;
 		}
 
-		throw new System.Exception($"There is no free elements in pool of type {typeof(T)}");
+		public bool HasBusyElement(out T element)
+		{
+			foreach (var mono in _pool)
+			{
+				if (mono.gameObject.activeInHierarchy)
+				{
+					element = mono;
+					mono.gameObject.SetActive(false);
+					return true;
+				}
+			}
+
+			element = null;
+			return false;
+		}
+
+		public T GetFreeElement()
+		{
+			if (HasFreeElement(element: out var element))
+			{
+				return element;
+			}
+
+			if (IsAutoExpand)
+			{
+				return CreateObject(true);
+			}
+
+			throw new System.Exception($"There is no free elements in pool of type {typeof(T)}");
+		}
 	}
 }
